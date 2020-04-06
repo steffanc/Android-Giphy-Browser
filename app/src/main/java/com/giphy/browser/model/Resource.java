@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class Resource<T> {
-    enum Status {LOADING, SUCCESS, FAILURE}
+    public enum Status {LOADING, SUCCESS, FAILURE}
 
     private final Resource.Status status;
     private final T data;

@@ -1,4 +1,4 @@
-package com.giphy.browser.common;
+package com.giphy.browser.common.model;
 
 import com.giphy.browser.common.util.Block;
 
@@ -13,7 +13,7 @@ public class SingleEvent<T> {
     public void maybeConsume(Block<T> block) {
         if (!consumed) {
             consumed = true;
-            block.apply(data);
+            block.invoke(data);
         }
     }
 }

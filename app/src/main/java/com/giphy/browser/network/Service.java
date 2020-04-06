@@ -1,5 +1,7 @@
 package com.giphy.browser.network;
 
+import com.giphy.browser.model.Gifs;
+
 import io.reactivex.Single;
 import retrofit2.adapter.rxjava2.Result;
 import retrofit2.http.GET;
@@ -7,8 +9,8 @@ import retrofit2.http.Query;
 
 public interface Service {
     @GET("/v1/gifs/trending")
-    Single<Result<GifsResponse>> getTrendingGifs(@Query("api_key") String apiKey);
+    Single<Result<Gifs>> getTrendingGifs(@Query("api_key") String apiKey, @Query("offset") int offset);
 
     @GET("/v1/gifs/search")
-    Single<Result<GifsResponse>> getSearchGifs(@Query("api_key") String apiKey);
+    Single<Result<Gifs>> getSearchGifs(@Query("api_key") String apiKey, @Query("offset") int offset);
 }

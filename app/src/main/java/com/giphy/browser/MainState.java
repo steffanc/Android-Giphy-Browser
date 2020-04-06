@@ -1,7 +1,7 @@
 package com.giphy.browser;
 
 import com.giphy.browser.common.BaseState;
-import com.giphy.browser.common.SingleEvent;
+import com.giphy.browser.common.model.SingleEvent;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -82,28 +82,34 @@ public class MainState implements BaseState {
             this.navigateGifDetail = state.navigateGifDetail;
         }
 
-        public void setItems(@NotNull List<GifItem> items) {
+        public Builder setItems(@NotNull List<GifItem> items) {
             this.items = items;
+            return this;
         }
 
-        public void setQuery(@NotNull String query) {
+        public Builder setQuery(@NotNull String query) {
             this.query = query;
+            return this;
         }
 
-        public void setLoading(boolean loading) {
+        public Builder setLoading(boolean loading) {
             isLoading = loading;
+            return this;
         }
 
-        public void setRefreshing(boolean refreshing) {
+        public Builder setRefreshing(boolean refreshing) {
             isRefreshing = refreshing;
+            return this;
         }
 
-        public void setToast(@Nullable SingleEvent<String> toast) {
+        public Builder setToast(@Nullable SingleEvent<String> toast) {
             this.toast = toast;
+            return this;
         }
 
-        public void setNavigateGifDetail(@Nullable SingleEvent<GifDetailActivity.Args> navigateGifDetail) {
+        public Builder setNavigateGifDetail(@Nullable SingleEvent<GifDetailActivity.Args> navigateGifDetail) {
             this.navigateGifDetail = navigateGifDetail;
+            return this;
         }
 
         public MainState build() {

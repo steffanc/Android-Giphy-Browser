@@ -1,6 +1,6 @@
 package com.giphy.browser;
 
-import com.giphy.browser.model.Gif;
+import com.giphy.browser.model.Gifs;
 import com.giphy.browser.model.Resource;
 import com.giphy.browser.network.ApiException;
 import com.giphy.browser.network.NetworkException;
@@ -9,7 +9,6 @@ import com.giphy.browser.network.Service;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Single;
@@ -26,18 +25,16 @@ public class Repository {
         this.service = service;
     }
 
-    public Single<Resource<List<Gif>>> getTrendingGifs() {
-        return service.getTrendingGifs(apiKey)
+    public Single<Resource<Gifs>> getTrendingGifs(int offset) {
+        return service.getTrendingGifs(apiKey, offset)
                 .subscribeOn(Schedulers.io())
-                .map(this::toResource)
-                .map((result) -> result.map((response) -> response.data));
+                .map(this::toResource);
     }
 
-    public Single<Resource<List<Gif>>> getSearchGifs() {
-        return service.getSearchGifs(apiKey)
+    public Single<Resource<Gifs>> getSearchGifs(int offset) {
+        return service.getSearchGifs(apiKey, offset)
                 .subscribeOn(Schedulers.io())
-                .map(this::toResource)
-                .map((result) -> result.map((response) -> response.data));
+                .map(this::toResource);
     }
 
     private <T> Resource<T> toResource(Result<T> result) {

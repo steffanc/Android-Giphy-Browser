@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.giphy.browser.common.BaseActivity;
+import com.giphy.browser.common.InfiniteScrollListener;
 import com.giphy.browser.databinding.ActivityMainBinding;
 
 public class MainActivity extends BaseActivity {
@@ -33,7 +34,10 @@ public class MainActivity extends BaseActivity {
 
         adapter = new MainAdapter((position, item) -> viewModel.gifClicked(position, item));
         binding.content.setAdapter(adapter);
-        binding.content.setLayoutManager(new GridLayoutManager(this, 2));
+        final GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        binding.content.setLayoutManager(layoutManager);
+        binding.content.addOnScrollListener(new InfiniteScrollListener(
+                layoutManager, 10, () -> viewModel.scrollThresholdReached()));
 
         binding.swipeContainer.setOnRefreshListener(() -> viewModel.screenRefreshed());
     }
