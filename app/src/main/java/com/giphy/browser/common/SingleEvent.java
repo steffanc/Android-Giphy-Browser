@@ -1,6 +1,6 @@
 package com.giphy.browser.common;
 
-import androidx.arch.core.util.Function;
+import com.giphy.browser.common.util.Block;
 
 public class SingleEvent<T> {
     private final T data;
@@ -10,10 +10,10 @@ public class SingleEvent<T> {
         this.data = data;
     }
 
-    public void maybeConsume(Function<T, Void> function) {
+    public void maybeConsume(Block<T> block) {
         if (!consumed) {
             consumed = true;
-            function.apply(data);
+            block.apply(data);
         }
     }
 }

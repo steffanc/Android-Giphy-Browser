@@ -1,10 +1,12 @@
 package com.giphy.browser;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -16,6 +18,7 @@ public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
     private MainViewModel viewModel;
+    private SearchView searchView;
     private MainAdapter adapter;
 
     @Override
@@ -35,6 +38,40 @@ public class MainActivity extends BaseActivity {
         binding.swipeContainer.setOnRefreshListener(() -> viewModel.screenRefreshed());
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnSearchClickListener((view) -> viewModel.searchClicked());
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                viewModel.queryUpdated(newText);
+                return true;
+            }
+        });
+        searchView.setOnCloseListener(() -> {
+            viewModel.searchClosed();
+            return false;
+        });
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!searchView.isIconified()) {
+            searchView.setIconified(true);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void render(MainState state) {
         adapter.submitList(state.getItems());
 
@@ -43,10 +80,8 @@ public class MainActivity extends BaseActivity {
         binding.swipeContainer.setEnabled(!state.isLoading());
 
         if (state.getToast() != null) {
-            state.getToast().maybeConsume((string) -> {
-                Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
-                return null;
-            });
+            state.getToast().maybeConsume((string) ->
+                    Toast.makeText(this, string, Toast.LENGTH_SHORT).show());
         }
     }
 }

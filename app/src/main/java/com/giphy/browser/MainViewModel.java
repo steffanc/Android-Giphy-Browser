@@ -18,6 +18,15 @@ public class MainViewModel extends BaseViewModel<MainState> {
         getTrendingGifs();
     }
 
+    public void searchClicked() {
+    }
+
+    public void queryUpdated(String query) {
+    }
+
+    public void searchClosed() {
+    }
+
     public void screenRefreshed() {
     }
 
