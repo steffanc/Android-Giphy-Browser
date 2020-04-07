@@ -2,6 +2,8 @@ package com.giphy.browser.main;
 
 import android.text.TextUtils;
 
+import androidx.annotation.MainThread;
+
 import com.giphy.browser.Repository;
 import com.giphy.browser.common.BaseViewModel;
 import com.giphy.browser.common.model.LoadingType;
@@ -37,20 +39,12 @@ class MainViewModel extends BaseViewModel<MainState> {
         super(new MainState.Builder().build());
         this.repository = repository;
 
-        disposables.add(trendingSubject.switchMap(this::getTrendingGifs)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::reduceTrendingGifs));
-
-        disposables.add(searchSubject.switchMap((event) -> Observable.just(event).delay(500, TimeUnit.MILLISECONDS))
-                .switchMap(this::getSearchGifs)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::reduceSearchGifs));
-
+        setMode(Mode.TRENDING);
         trendingSubject.onNext(new FetchGifsEvent(LoadingType.LOADING, new Pagination(), null));
     }
 
     void searchClicked() {
-        mode = Mode.SEARCHING;
+        setMode(Mode.SEARCHING);
     }
 
     void queryUpdated(@NotNull String query) {
@@ -61,8 +55,7 @@ class MainViewModel extends BaseViewModel<MainState> {
     }
 
     void searchClosed() {
-        mode = Mode.TRENDING;
-        setState(new MainState.Builder(getState()).setItems(cachedTrendingItems).build());
+        setMode(Mode.TRENDING);
     }
 
     void screenRefreshed() {
@@ -88,55 +81,44 @@ class MainViewModel extends BaseViewModel<MainState> {
         }
     }
 
-    private Observable<FetchGifsResult> getTrendingGifs(FetchGifsEvent event) {
-        return repository.getTrendingGifs(event.pagination.nextOffset())
-                .map((resource) -> new FetchGifsResult(event.loadingType, resource, null))
-                .toObservable()
-                .startWith(new FetchGifsResult(event.loadingType, Resource.loading(), null));
-    }
+    private void setMode(@NotNull Mode mode) {
+        this.mode = mode;
+        disposables.clear();
 
-    private Observable<FetchGifsResult> getSearchGifs(FetchGifsEvent event) {
-        return repository.getSearchGifs(event.query, event.pagination.nextOffset())
-                .map((resource) -> new FetchGifsResult(event.loadingType, resource, null))
-                .toObservable()
-                .startWith(new FetchGifsResult(event.loadingType, Resource.loading(), null));
-    }
-
-    private void reduceTrendingGifs(FetchGifsResult result) {
-        switch (result.gifs.getStatus()) {
-            case LOADING:
-                setState(new MainState.Builder(getState())
-                        .setLoading(result.loadingType.equals(LoadingType.LOADING))
-                        .setRefreshing(result.loadingType.equals(LoadingType.REFRESHING))
-                        .setPaging(result.loadingType.equals(LoadingType.PAGING))
-                        .build());
-                break;
-            case SUCCESS:
-                trendingPagination = result.gifs.getOrThrowData().pagination;
-                final List<GifItem> items = new ArrayList<>();
-                if (result.loadingType.equals(LoadingType.PAGING)) {
-                    items.addAll(getState().getItems());
-                }
-                items.addAll(toItems(result.gifs.getOrThrowData()));
-                cachedTrendingItems = items;
-                setState(new MainState.Builder(getState())
-                        .setItems(items)
-                        .setLoading(false)
-                        .setRefreshing(false)
-                        .setPaging(false)
-                        .build());
-                break;
-            case FAILURE:
-                setState(new MainState.Builder(getState())
-                        .setLoading(false)
-                        .setRefreshing(false)
-                        .setPaging(false)
-                        .build());
-                break;
+        if (mode.equals(Mode.TRENDING)) {
+            disposables.add(trendingSubject
+                    .switchMap(this::fetchGifs)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::reduceGifs));
+        } else {
+            searchPagination = new Pagination();
+            disposables.add(searchSubject
+                    .switchMap((event) -> Observable.just(event).delay(500, TimeUnit.MILLISECONDS))
+                    .switchMap(this::fetchGifs)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::reduceGifs));
         }
+
+        setState(new MainState.Builder(getState())
+                .setItems(cachedTrendingItems)
+                .setQuery("")
+                .setLoading(false)
+                .setRefreshing(false)
+                .setPaging(false)
+                .build());
     }
 
-    private void reduceSearchGifs(FetchGifsResult result) {
+    private Observable<FetchGifsResult> fetchGifs(FetchGifsEvent event) {
+        return (event.query != null
+                ? repository.getSearchGifs(event.query, event.pagination.nextOffset())
+                : repository.getTrendingGifs(event.pagination.nextOffset()))
+                .map((resource) -> new FetchGifsResult(event.loadingType, resource, null))
+                .toObservable()
+                .startWith(new FetchGifsResult(event.loadingType, Resource.loading(), null));
+    }
+
+    @MainThread
+    private void reduceGifs(FetchGifsResult result) {
         switch (result.gifs.getStatus()) {
             case LOADING:
                 setState(new MainState.Builder(getState())
@@ -146,12 +128,19 @@ class MainViewModel extends BaseViewModel<MainState> {
                         .build());
                 break;
             case SUCCESS:
-                searchPagination = result.gifs.getOrThrowData().pagination;
                 final List<GifItem> items = new ArrayList<>();
                 if (result.loadingType.equals(LoadingType.PAGING)) {
                     items.addAll(getState().getItems());
                 }
                 items.addAll(toItems(result.gifs.getOrThrowData()));
+
+                if (mode.equals(Mode.TRENDING)) {
+                    trendingPagination = result.gifs.getOrThrowData().pagination;
+                    cachedTrendingItems = items;
+                } else {
+                    searchPagination = result.gifs.getOrThrowData().pagination;
+                }
+
                 setState(new MainState.Builder(getState())
                         .setItems(items)
                         .setLoading(false)
