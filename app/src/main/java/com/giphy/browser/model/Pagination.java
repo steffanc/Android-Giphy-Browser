@@ -11,4 +11,8 @@ public class Pagination {
 
     @Json(name = "count")
     public int count = 0;
+
+    public int nextOffset() {
+        return offset + count;
+    }
 }

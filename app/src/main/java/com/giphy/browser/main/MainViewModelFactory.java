@@ -1,8 +1,10 @@
-package com.giphy.browser;
+package com.giphy.browser.main;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.giphy.browser.Repository;
 
 public class MainViewModelFactory implements ViewModelProvider.Factory {
     private final Repository repository;

@@ -1,4 +1,4 @@
-package com.giphy.browser;
+package com.giphy.browser.main;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +11,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.giphy.browser.GiphyApp;
+import com.giphy.browser.R;
+import com.giphy.browser.Repository;
 import com.giphy.browser.common.BaseActivity;
 import com.giphy.browser.common.InfiniteScrollListener;
 import com.giphy.browser.databinding.ActivityMainBinding;

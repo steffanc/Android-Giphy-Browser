@@ -31,8 +31,8 @@ public class Repository {
                 .map(this::toResource);
     }
 
-    public Single<Resource<Gifs>> getSearchGifs(int offset) {
-        return service.getSearchGifs(apiKey, offset)
+    public Single<Resource<Gifs>> getSearchGifs(String query, int offset) {
+        return service.getSearchGifs(apiKey, query, offset)
                 .subscribeOn(Schedulers.io())
                 .map(this::toResource);
     }

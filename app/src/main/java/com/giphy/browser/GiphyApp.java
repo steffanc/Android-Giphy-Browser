@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.viewbinding.BuildConfig;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.giphy.browser.network.Service;
 
 import retrofit2.Retrofit;
@@ -21,6 +22,7 @@ public class GiphyApp extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+        Fresco.initialize(this);
 
         final Service service = new Retrofit.Builder()
                 .baseUrl("https://api.giphy.com")

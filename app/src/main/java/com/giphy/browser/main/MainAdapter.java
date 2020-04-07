@@ -1,11 +1,18 @@
-package com.giphy.browser;
+package com.giphy.browser.main;
 
+import android.graphics.drawable.Animatable;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.controller.BaseControllerListener;
+import com.facebook.drawee.controller.ControllerListener;
+import com.facebook.imagepipeline.image.ImageInfo;
+import com.giphy.browser.R;
 import com.giphy.browser.common.BaseListAdapter;
 import com.giphy.browser.common.BaseViewHolder;
 import com.giphy.browser.databinding.GifItemViewBinding;
@@ -42,11 +49,37 @@ public class MainAdapter extends BaseListAdapter<GifItem> {
 
         @Override
         public void bind(int position, GifItem item) {
-            itemView.setOnClickListener((view) -> {
+            binding.getRoot().setOnClickListener((view) -> {
                 if (getAdapterPosition() != RecyclerView.NO_POSITION) {
                     listener.onGifClicked(getAdapterPosition(), item);
                 }
             });
+
+            final ControllerListener listener = new BaseControllerListener<ImageInfo>() {
+                @Override
+                public void onIntermediateImageSet(String id, ImageInfo imageInfo) {
+                    updateViewSize(imageInfo);
+                }
+
+                @Override
+                public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
+                    updateViewSize(imageInfo);
+                }
+
+                private void updateViewSize(@Nullable ImageInfo imageInfo) {
+                    if (imageInfo != null) {
+                        binding.gif.setAspectRatio((float) imageInfo.getWidth() / imageInfo.getHeight());
+                    }
+                }
+            };
+
+            binding.gif.setController(
+                    Fresco.newDraweeControllerBuilder()
+                            .setAutoPlayAnimations(true)
+                            .setControllerListener(listener)
+                            .setOldController(binding.gif.getController())
+                            .setUri(item.getWebp())
+                            .build());
         }
     }
 
@@ -58,7 +91,7 @@ public class MainAdapter extends BaseListAdapter<GifItem> {
 
         @Override
         public boolean areContentsTheSame(@NonNull GifItem oldItem, @NonNull GifItem newItem) {
-            return oldItem.equals(newItem);
+            return true;
         }
     }
 }

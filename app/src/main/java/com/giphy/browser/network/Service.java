@@ -12,5 +12,5 @@ public interface Service {
     Single<Result<Gifs>> getTrendingGifs(@Query("api_key") String apiKey, @Query("offset") int offset);
 
     @GET("/v1/gifs/search")
-    Single<Result<Gifs>> getSearchGifs(@Query("api_key") String apiKey, @Query("offset") int offset);
+    Single<Result<Gifs>> getSearchGifs(@Query("api_key") String apiKey, @Query("q") String query, @Query("offset") int offset);
 }

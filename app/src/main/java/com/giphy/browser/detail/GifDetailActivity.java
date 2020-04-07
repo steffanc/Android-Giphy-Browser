@@ -1,4 +1,4 @@
-package com.giphy.browser;
+package com.giphy.browser.detail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
+import com.giphy.browser.R;
 import com.giphy.browser.common.BaseActivity;
 import com.giphy.browser.databinding.ActivityGifDetailBinding;
 
