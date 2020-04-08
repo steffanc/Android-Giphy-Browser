@@ -8,6 +8,8 @@ import androidx.viewbinding.BuildConfig;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.giphy.browser.network.Service;
 
+import io.reactivex.exceptions.UndeliverableException;
+import io.reactivex.plugins.RxJavaPlugins;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
@@ -24,6 +26,15 @@ public class GiphyApp extends Application {
             Timber.plant(new Timber.DebugTree());
         }
         Fresco.initialize(this);
+
+        RxJavaPlugins.setErrorHandler((throwable -> {
+            if (throwable instanceof UndeliverableException) {
+                // Stream has been disposed of and we don't care about exceptions thrown after this happens
+                Timber.w(throwable, "Ignoring uncaught Rx exception");
+            } else {
+                throw new RuntimeException(throwable);
+            }
+        }));
 
         final Service service = new Retrofit.Builder()
                 .baseUrl("https://api.giphy.com")
