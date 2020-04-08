@@ -33,6 +33,8 @@ public class MainActivity extends BaseActivity {
     private MainViewModel viewModel;
     private SearchView searchView;
     private MainAdapter adapter;
+    @Nullable
+    private Toast toast;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,8 +111,12 @@ public class MainActivity extends BaseActivity {
         binding.swipeContainer.setEnabled(!state.isLoading());
 
         if (state.getToast() != null) {
-            state.getToast().maybeConsume((strRes) ->
-                    Toast.makeText(this, getString(strRes), Toast.LENGTH_SHORT).show());
+            state.getToast().maybeConsume((strRes) -> {
+                // Prevent multiple toasts from stacking
+                if (toast != null) toast.cancel();
+                toast = Toast.makeText(this, getString(strRes), Toast.LENGTH_SHORT);
+                toast.show();
+            });
         }
 
         if (state.getNavigateGifDetail() != null) {

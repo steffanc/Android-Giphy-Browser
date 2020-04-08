@@ -14,7 +14,7 @@ import java.util.List;
 public class MainState implements BaseState {
     @NonNull
     private final List<GifItem> items;
-    @NonNull
+    @Nullable
     private final String query;
     private final boolean isSearchVisible;
     private final boolean isLoading;
@@ -25,7 +25,7 @@ public class MainState implements BaseState {
     @Nullable
     private final SingleEvent<GifDetailActivity.Args> navigateGifDetail;
 
-    private MainState(@NonNull List<GifItem> items, @NonNull String query, boolean isSearchVisible, boolean isLoading, boolean isRefreshing, boolean isPaging, @Nullable SingleEvent<Integer> toast, @Nullable SingleEvent<GifDetailActivity.Args> navigateGifDetail) {
+    private MainState(@NonNull List<GifItem> items, @Nullable String query, boolean isSearchVisible, boolean isLoading, boolean isRefreshing, boolean isPaging, @Nullable SingleEvent<Integer> toast, @Nullable SingleEvent<GifDetailActivity.Args> navigateGifDetail) {
         this.items = items;
         this.query = query;
         this.isSearchVisible = isSearchVisible;
@@ -41,7 +41,7 @@ public class MainState implements BaseState {
         return new ArrayList<>(items);
     }
 
-    @NonNull
+    @Nullable
     public String getQuery() {
         return query;
     }
@@ -75,8 +75,8 @@ public class MainState implements BaseState {
     public static class Builder {
         @NonNull
         private List<GifItem> items = Collections.emptyList();
-        @NonNull
-        private String query = "";
+        @Nullable
+        private String query = null;
         private boolean isSearchVisible = false;
         private boolean isLoading = false;
         private boolean isRefreshing = false;
@@ -106,8 +106,8 @@ public class MainState implements BaseState {
             return this;
         }
 
-        @NonNull
-        public Builder setQuery(@NonNull String query) {
+        @Nullable
+        public Builder setQuery(@Nullable String query) {
             this.query = query;
             return this;
         }

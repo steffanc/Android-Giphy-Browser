@@ -35,14 +35,7 @@ class MainViewModel extends BaseViewModel<MainState> {
     private final List<Integer> backgroundColors;
     @NonNull
     private final PublishSubject<FetchGifsEvent> gifsSubject = PublishSubject.create();
-    @NonNull
-    private Pagination trendingPagination = new Pagination();
-    @NonNull
-    private Pagination searchPagination = new Pagination();
-    @NonNull
-    private String lastSuccessfulQuery = "";
-    @NonNull
-    private Mode mode = Mode.TRENDING;
+    private FetchGifsResult lastSuccessfulResult = null;
 
     MainViewModel(@NonNull Repository repository, @NonNull List<Integer> backgroundColors) {
         super(new MainState.Builder().build());
@@ -65,11 +58,6 @@ class MainViewModel extends BaseViewModel<MainState> {
     }
 
     void queryUpdated(@NonNull String query) {
-        mode = Mode.SEARCHING;
-
-        // reset trending state
-        trendingPagination = new Pagination();
-
         if (query.equals(getState().getQuery())) {
             return;
         }
@@ -85,23 +73,15 @@ class MainViewModel extends BaseViewModel<MainState> {
 
     void searchClosed() {
         setState(new MainState.Builder(getState())
-                .setQuery("")
+                .setQuery(null)
                 .setSearchVisible(false)
                 .build());
 
-        // reset searching state
-        searchPagination = new Pagination();
-        lastSuccessfulQuery = "";
-
-        mode = Mode.TRENDING;
         gifsSubject.onNext(new FetchGifsEvent(LoadingType.LOADING, new Pagination(), null));
     }
 
     void screenRefreshed() {
-        final FetchGifsEvent event = mode.equals(Mode.TRENDING)
-                ? new FetchGifsEvent(LoadingType.REFRESHING, new Pagination(), null)
-                : new FetchGifsEvent(LoadingType.REFRESHING, new Pagination(), getState().getQuery());
-        gifsSubject.onNext(event);
+        gifsSubject.onNext(new FetchGifsEvent(LoadingType.REFRESHING, new Pagination(), getState().getQuery()));
     }
 
     void gifClicked(int position, @NonNull GifItem item) {
@@ -119,10 +99,9 @@ class MainViewModel extends BaseViewModel<MainState> {
             return;
         }
 
-        final FetchGifsEvent event = mode.equals(Mode.TRENDING)
-                ? new FetchGifsEvent(LoadingType.PAGING, trendingPagination, null)
-                : new FetchGifsEvent(LoadingType.PAGING, searchPagination, lastSuccessfulQuery);
-        gifsSubject.onNext(event);
+        gifsSubject.onNext(new FetchGifsEvent(LoadingType.PAGING,
+                lastSuccessfulResult.gifs.getOrThrowData().pagination,
+                lastSuccessfulResult.query));
     }
 
     @NonNull
@@ -153,12 +132,7 @@ class MainViewModel extends BaseViewModel<MainState> {
                 items.addAll(toItems(result.gifs.getOrThrowData(), backgroundColors));
                 items = removeDuplicates(items);
 
-                if (mode.equals(Mode.TRENDING)) {
-                    trendingPagination = result.gifs.getOrThrowData().pagination;
-                } else {
-                    searchPagination = result.gifs.getOrThrowData().pagination;
-                    lastSuccessfulQuery = result.query;
-                }
+                lastSuccessfulResult = result;
 
                 setState(new MainState.Builder(getState())
                         .setItems(items)
@@ -204,8 +178,6 @@ class MainViewModel extends BaseViewModel<MainState> {
         }
         return filteredItems;
     }
-
-    private enum Mode {TRENDING, SEARCHING}
 
     private static class FetchGifsEvent {
         @NonNull
