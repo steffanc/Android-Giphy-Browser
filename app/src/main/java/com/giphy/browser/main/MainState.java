@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import com.giphy.browser.common.BaseState;
 import com.giphy.browser.common.model.SingleEvent;
+import com.giphy.browser.detail.GifDetailActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,9 +23,9 @@ public class MainState implements BaseState {
     @Nullable
     private final SingleEvent<Integer> toast;
     @Nullable
-    private final SingleEvent<String> navigateGifDetail;
+    private final SingleEvent<GifDetailActivity.Args> navigateGifDetail;
 
-    private MainState(@NonNull List<GifItem> items, @NonNull String query, boolean isSearchVisible, boolean isLoading, boolean isRefreshing, boolean isPaging, @Nullable SingleEvent<Integer> toast, @Nullable SingleEvent<String> navigateGifDetail) {
+    private MainState(@NonNull List<GifItem> items, @NonNull String query, boolean isSearchVisible, boolean isLoading, boolean isRefreshing, boolean isPaging, @Nullable SingleEvent<Integer> toast, @Nullable SingleEvent<GifDetailActivity.Args> navigateGifDetail) {
         this.items = items;
         this.query = query;
         this.isSearchVisible = isSearchVisible;
@@ -67,7 +68,7 @@ public class MainState implements BaseState {
     }
 
     @Nullable
-    public SingleEvent<String> getNavigateGifDetail() {
+    public SingleEvent<GifDetailActivity.Args> getNavigateGifDetail() {
         return navigateGifDetail;
     }
 
@@ -83,7 +84,7 @@ public class MainState implements BaseState {
         @Nullable
         private SingleEvent<Integer> toast = null;
         @Nullable
-        private SingleEvent<String> navigateGifDetail = null;
+        private SingleEvent<GifDetailActivity.Args> navigateGifDetail = null;
 
         public Builder() {
         }
@@ -142,7 +143,7 @@ public class MainState implements BaseState {
         }
 
         @NonNull
-        public Builder setNavigateGifDetail(@Nullable SingleEvent<String> navigateGifDetail) {
+        public Builder setNavigateGifDetail(@Nullable SingleEvent<GifDetailActivity.Args> navigateGifDetail) {
             this.navigateGifDetail = navigateGifDetail;
             return this;
         }

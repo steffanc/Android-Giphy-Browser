@@ -114,8 +114,8 @@ public class MainActivity extends BaseActivity {
         }
 
         if (state.getNavigateGifDetail() != null) {
-            state.getNavigateGifDetail().maybeConsume((webpUri) ->
-                    startActivity(GifDetailActivity.newIntent(this, webpUri)));
+            state.getNavigateGifDetail().maybeConsume((args) ->
+                    startActivity(GifDetailActivity.newIntent(this, args)));
         }
     }
 }

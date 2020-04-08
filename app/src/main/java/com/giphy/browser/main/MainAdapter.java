@@ -53,9 +53,7 @@ public class MainAdapter extends BaseListAdapter<GifItem> {
                 }
             });
 
-            final int width = Integer.parseInt(item.getWidth());
-            final int height = Integer.parseInt(item.getHeight());
-            binding.gif.setAspectRatio((float) width / height);
+            binding.gif.setAspectRatio((float) item.getWidth() / item.getHeight());
             binding.gif.getHierarchy().setPlaceholderImage(item.getBackgroundColor());
             binding.gif.setController(
                     Fresco.newDraweeControllerBuilder()

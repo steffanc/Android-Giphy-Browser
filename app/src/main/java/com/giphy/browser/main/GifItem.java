@@ -10,14 +10,12 @@ public class GifItem implements BaseItem {
     private final String id;
     @NonNull
     private final String webp;
-    @NonNull
-    private final String width;
-    @NonNull
-    private final String height;
+    private final int width;
+    private final int height;
     @ColorRes
     private final int backgroundColor;
 
-    public GifItem(@NonNull String id, @NonNull String webp, @NonNull String width, @NonNull String height, int backgroundColor) {
+    public GifItem(@NonNull String id, @NonNull String webp, @NonNull int width, @NonNull int height, int backgroundColor) {
         this.id = id;
         this.webp = webp;
         this.width = width;
@@ -37,12 +35,12 @@ public class GifItem implements BaseItem {
     }
 
     @NonNull
-    public String getWidth() {
+    public int getWidth() {
         return width;
     }
 
     @NonNull
-    public String getHeight() {
+    public int getHeight() {
         return height;
     }
 
