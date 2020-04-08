@@ -1,4 +1,4 @@
-package com.giphy.browser.main;
+package com.giphy.browser.gif_list;
 
 import android.text.TextUtils;
 
@@ -7,15 +7,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.giphy.browser.R;
-import com.giphy.browser.Repository;
 import com.giphy.browser.common.BaseViewModel;
+import com.giphy.browser.common.Repository;
+import com.giphy.browser.common.model.Gif;
+import com.giphy.browser.common.model.Gifs;
 import com.giphy.browser.common.model.LoadingType;
+import com.giphy.browser.common.model.Pagination;
+import com.giphy.browser.common.model.Resource;
 import com.giphy.browser.common.model.SingleEvent;
-import com.giphy.browser.detail.GifDetailActivity;
-import com.giphy.browser.model.Gif;
-import com.giphy.browser.model.Gifs;
-import com.giphy.browser.model.Pagination;
-import com.giphy.browser.model.Resource;
+import com.giphy.browser.gif_detail.GifDetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,7 +27,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.subjects.PublishSubject;
 
-class MainViewModel extends BaseViewModel<MainState> {
+class GifListViewModel extends BaseViewModel<GifListState> {
 
     @NonNull
     private final Repository repository;
@@ -37,8 +37,8 @@ class MainViewModel extends BaseViewModel<MainState> {
     private final PublishSubject<FetchGifsEvent> gifsSubject = PublishSubject.create();
     private FetchGifsResult lastSuccessfulResult = null;
 
-    MainViewModel(@NonNull Repository repository, @NonNull List<Integer> backgroundColors) {
-        super(new MainState.Builder().build());
+    GifListViewModel(@NonNull Repository repository, @NonNull List<Integer> backgroundColors) {
+        super(new GifListState.Builder().build());
         this.repository = repository;
         this.backgroundColors = backgroundColors;
 
@@ -54,7 +54,7 @@ class MainViewModel extends BaseViewModel<MainState> {
     }
 
     void searchClicked() {
-        setState(new MainState.Builder(getState()).setSearchVisible(true).build());
+        setState(new GifListState.Builder(getState()).setSearchVisible(true).build());
     }
 
     void queryUpdated(@NonNull String query) {
@@ -62,7 +62,7 @@ class MainViewModel extends BaseViewModel<MainState> {
             return;
         }
 
-        setState(new MainState.Builder(getState()).setQuery(query).build());
+        setState(new GifListState.Builder(getState()).setQuery(query).build());
 
         if (TextUtils.isEmpty(query)) {
             return;
@@ -72,7 +72,7 @@ class MainViewModel extends BaseViewModel<MainState> {
     }
 
     void searchClosed() {
-        setState(new MainState.Builder(getState())
+        setState(new GifListState.Builder(getState())
                 .setQuery(null)
                 .setSearchVisible(false)
                 .build());
@@ -85,7 +85,7 @@ class MainViewModel extends BaseViewModel<MainState> {
     }
 
     void gifClicked(int position, @NonNull GifItem item) {
-        setState(new MainState.Builder(getState())
+        setState(new GifListState.Builder(getState())
                 .setNavigateGifDetail(new SingleEvent<>(new GifDetailActivity.Args(
                         item.getWebp(),
                         item.getWidth(),
@@ -118,7 +118,7 @@ class MainViewModel extends BaseViewModel<MainState> {
     private void reduceGifs(@NonNull FetchGifsResult result) {
         switch (result.gifs.getStatus()) {
             case LOADING:
-                setState(new MainState.Builder(getState())
+                setState(new GifListState.Builder(getState())
                         .setLoading(result.loadingType.equals(LoadingType.LOADING))
                         .setRefreshing(result.loadingType.equals(LoadingType.REFRESHING))
                         .setPaging(result.loadingType.equals(LoadingType.PAGING))
@@ -134,7 +134,7 @@ class MainViewModel extends BaseViewModel<MainState> {
 
                 lastSuccessfulResult = result;
 
-                setState(new MainState.Builder(getState())
+                setState(new GifListState.Builder(getState())
                         .setItems(items)
                         .setLoading(false)
                         .setRefreshing(false)
@@ -142,7 +142,7 @@ class MainViewModel extends BaseViewModel<MainState> {
                         .build());
                 break;
             case FAILURE:
-                setState(new MainState.Builder(getState())
+                setState(new GifListState.Builder(getState())
                         .setToast(new SingleEvent<>(R.string.failed_fetch))
                         .setLoading(false)
                         .setRefreshing(false)

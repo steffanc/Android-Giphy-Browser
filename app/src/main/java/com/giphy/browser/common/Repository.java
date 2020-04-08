@@ -1,12 +1,12 @@
-package com.giphy.browser;
+package com.giphy.browser.common;
 
 import androidx.annotation.NonNull;
 
-import com.giphy.browser.model.Gifs;
-import com.giphy.browser.model.Resource;
-import com.giphy.browser.network.ApiException;
-import com.giphy.browser.network.NetworkException;
-import com.giphy.browser.network.Service;
+import com.giphy.browser.common.model.Gifs;
+import com.giphy.browser.common.model.Resource;
+import com.giphy.browser.common.network.ApiException;
+import com.giphy.browser.common.network.NetworkException;
+import com.giphy.browser.common.network.Service;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -53,7 +53,7 @@ public class Repository {
         } else {
             final Response<T> response = Objects.requireNonNull(result.response());
             if (response.isSuccessful()) {
-                return Resource.success(response.body());
+                return Resource.success(Objects.requireNonNull(response.body()));
             }
             // API error
             return Resource.failure(new ApiException(response.message()));

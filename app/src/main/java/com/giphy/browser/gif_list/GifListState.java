@@ -1,17 +1,17 @@
-package com.giphy.browser.main;
+package com.giphy.browser.gif_list;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.giphy.browser.common.BaseState;
 import com.giphy.browser.common.model.SingleEvent;
-import com.giphy.browser.detail.GifDetailActivity;
+import com.giphy.browser.gif_detail.GifDetailActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MainState implements BaseState {
+public class GifListState implements BaseState {
     @NonNull
     private final List<GifItem> items;
     @Nullable
@@ -25,7 +25,7 @@ public class MainState implements BaseState {
     @Nullable
     private final SingleEvent<GifDetailActivity.Args> navigateGifDetail;
 
-    private MainState(@NonNull List<GifItem> items, @Nullable String query, boolean isSearchVisible, boolean isLoading, boolean isRefreshing, boolean isPaging, @Nullable SingleEvent<Integer> toast, @Nullable SingleEvent<GifDetailActivity.Args> navigateGifDetail) {
+    private GifListState(@NonNull List<GifItem> items, @Nullable String query, boolean isSearchVisible, boolean isLoading, boolean isRefreshing, boolean isPaging, @Nullable SingleEvent<Integer> toast, @Nullable SingleEvent<GifDetailActivity.Args> navigateGifDetail) {
         this.items = items;
         this.query = query;
         this.isSearchVisible = isSearchVisible;
@@ -89,7 +89,7 @@ public class MainState implements BaseState {
         public Builder() {
         }
 
-        public Builder(@NonNull MainState state) {
+        public Builder(@NonNull GifListState state) {
             this.items = state.items;
             this.query = state.query;
             this.isSearchVisible = state.isSearchVisible;
@@ -106,7 +106,7 @@ public class MainState implements BaseState {
             return this;
         }
 
-        @Nullable
+        @NonNull
         public Builder setQuery(@Nullable String query) {
             this.query = query;
             return this;
@@ -149,8 +149,8 @@ public class MainState implements BaseState {
         }
 
         @NonNull
-        public MainState build() {
-            return new MainState(items, query, isSearchVisible, isLoading, isRefreshing, isPaging, toast, navigateGifDetail);
+        public GifListState build() {
+            return new GifListState(items, query, isSearchVisible, isLoading, isRefreshing, isPaging, toast, navigateGifDetail);
         }
     }
 }

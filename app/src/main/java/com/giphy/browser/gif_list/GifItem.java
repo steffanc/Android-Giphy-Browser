@@ -1,4 +1,4 @@
-package com.giphy.browser.main;
+package com.giphy.browser.gif_list;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
@@ -15,7 +15,7 @@ public class GifItem implements BaseItem {
     @ColorRes
     private final int backgroundColor;
 
-    public GifItem(@NonNull String id, @NonNull String webp, @NonNull int width, @NonNull int height, int backgroundColor) {
+    public GifItem(@NonNull String id, @NonNull String webp, int width, int height, int backgroundColor) {
         this.id = id;
         this.webp = webp;
         this.width = width;
@@ -34,12 +34,10 @@ public class GifItem implements BaseItem {
         return webp;
     }
 
-    @NonNull
     public int getWidth() {
         return width;
     }
 
-    @NonNull
     public int getHeight() {
         return height;
     }

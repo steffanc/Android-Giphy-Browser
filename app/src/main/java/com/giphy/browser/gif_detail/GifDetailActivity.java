@@ -1,4 +1,4 @@
-package com.giphy.browser.detail;
+package com.giphy.browser.gif_detail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,12 +20,11 @@ import java.util.Objects;
 
 public class GifDetailActivity extends BaseActivity {
 
-    private ActivityGifDetailBinding binding;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_gif_detail);
+        final ActivityGifDetailBinding binding
+                = DataBindingUtil.setContentView(this, R.layout.activity_gif_detail);
 
         final Args args = Objects.requireNonNull((Args) getIntent().getSerializableExtra(ARGS));
 
@@ -66,7 +65,7 @@ public class GifDetailActivity extends BaseActivity {
         @ColorRes
         public final int backgroundColor;
 
-        public Args(@NonNull String webp, @NonNull int width, @NonNull int height, int backgroundColor) {
+        public Args(@NonNull String webp, int width, int height, int backgroundColor) {
             this.webp = webp;
             this.width = width;
             this.height = height;

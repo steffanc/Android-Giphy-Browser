@@ -1,4 +1,4 @@
-package com.giphy.browser.main;
+package com.giphy.browser.gif_list;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -18,28 +18,28 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.giphy.browser.GiphyApp;
 import com.giphy.browser.R;
-import com.giphy.browser.Repository;
 import com.giphy.browser.common.BaseActivity;
 import com.giphy.browser.common.InfiniteScrollListener;
-import com.giphy.browser.databinding.ActivityMainBinding;
-import com.giphy.browser.detail.GifDetailActivity;
+import com.giphy.browser.common.Repository;
+import com.giphy.browser.databinding.ActivityGifListBinding;
+import com.giphy.browser.gif_detail.GifDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity {
+public class GifListActivity extends BaseActivity {
 
-    private ActivityMainBinding binding;
-    private MainViewModel viewModel;
+    private ActivityGifListBinding binding;
+    private GifListViewModel viewModel;
     private SearchView searchView;
-    private MainAdapter adapter;
+    private GifListAdapter adapter;
     @Nullable
     private Toast toast;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_gif_list);
 
         final Context context = binding.getRoot().getContext();
         final TypedArray array = context.getResources().obtainTypedArray(R.array.backgroundColors);
@@ -50,11 +50,11 @@ public class MainActivity extends BaseActivity {
         array.recycle();
 
         final Repository repository = ((GiphyApp) getApplication()).getRepository();
-        viewModel = new ViewModelProvider(this, new MainViewModelFactory(repository, backgroundColors))
-                .get(MainViewModel.class);
+        viewModel = new ViewModelProvider(this, new GifListViewModelFactory(repository, backgroundColors))
+                .get(GifListViewModel.class);
         viewModel.getStateLiveData().observe(this, this::render);
 
-        adapter = new MainAdapter((position, item) -> viewModel.gifClicked(position, item));
+        adapter = new GifListAdapter((position, item) -> viewModel.gifClicked(position, item));
         binding.content.setAdapter(adapter);
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL);
         binding.content.setLayoutManager(layoutManager);
@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.gif_list_menu, menu);
         searchView = (SearchView) menu.findItem(R.id.search).getActionView();
 
         searchView.setQuery(viewModel.getState().getQuery(), false);
@@ -103,7 +103,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void render(@NonNull MainState state) {
+    private void render(@NonNull GifListState state) {
         adapter.submitList(state.getItems());
 
         binding.progressBar.setVisibility(state.isLoading() ? View.VISIBLE : View.GONE);

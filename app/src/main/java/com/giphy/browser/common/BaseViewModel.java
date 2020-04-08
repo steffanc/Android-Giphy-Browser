@@ -18,9 +18,9 @@ public abstract class BaseViewModel<T extends BaseState> extends ViewModel {
     @NonNull
     protected final CompositeDisposable disposables = new CompositeDisposable();
 
-    public BaseViewModel(@NonNull T state) {
+    protected BaseViewModel(@NonNull T state) {
         super();
-        stateLiveData = new MutableLiveData<T>(state);
+        stateLiveData = new MutableLiveData<>(state);
     }
 
     @CallSuper

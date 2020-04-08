@@ -1,4 +1,4 @@
-package com.giphy.browser.network;
+package com.giphy.browser.common.network;
 
 
 /**

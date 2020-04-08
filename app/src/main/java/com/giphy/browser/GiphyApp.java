@@ -6,7 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.viewbinding.BuildConfig;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.giphy.browser.network.Service;
+import com.giphy.browser.common.Repository;
+import com.giphy.browser.common.network.Service;
 
 import io.reactivex.exceptions.UndeliverableException;
 import io.reactivex.plugins.RxJavaPlugins;

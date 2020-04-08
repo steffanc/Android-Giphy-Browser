@@ -16,10 +16,6 @@ public class InfiniteScrollListener extends RecyclerView.OnScrollListener {
     @NonNull
     private final Listener listener;
 
-    private int pastVisibleItems = 0;
-    private int visibleItemCount = 0;
-    private int totalItemCount = 0;
-
     public InfiniteScrollListener(@NonNull StaggeredGridLayoutManager layoutManager, int threshold, @NonNull Listener listener) {
         this.layoutManager = layoutManager;
         this.threshold = threshold;
@@ -31,9 +27,9 @@ public class InfiniteScrollListener extends RecyclerView.OnScrollListener {
         super.onScrolled(recyclerView, dx, dy);
 
         if (dy > 0) {
-            visibleItemCount = layoutManager.getChildCount();
-            totalItemCount = layoutManager.getItemCount();
-            pastVisibleItems = layoutManager.findFirstVisibleItemPositions(null)[0];
+            final int visibleItemCount = layoutManager.getChildCount();
+            final int totalItemCount = layoutManager.getItemCount();
+            final int pastVisibleItems = layoutManager.findFirstVisibleItemPositions(null)[0];
 
             if ((visibleItemCount + pastVisibleItems) >= (totalItemCount - threshold)) {
                 listener.onScrollThresholdReached();

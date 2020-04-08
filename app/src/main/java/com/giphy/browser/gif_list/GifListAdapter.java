@@ -1,4 +1,4 @@
-package com.giphy.browser.main;
+package com.giphy.browser.gif_list;
 
 import android.view.ViewGroup;
 
@@ -12,12 +12,12 @@ import com.giphy.browser.common.BaseListAdapter;
 import com.giphy.browser.common.BaseViewHolder;
 import com.giphy.browser.databinding.GifItemViewBinding;
 
-public class MainAdapter extends BaseListAdapter<GifItem> {
+public class GifListAdapter extends BaseListAdapter<GifItem> {
 
     @NonNull
     private final GifViewHolder.Listener listener;
 
-    public MainAdapter(@NonNull GifViewHolder.Listener listener) {
+    public GifListAdapter(@NonNull GifViewHolder.Listener listener) {
         super(new Callback());
         this.listener = listener;
     }
@@ -39,7 +39,7 @@ public class MainAdapter extends BaseListAdapter<GifItem> {
         @NonNull
         private final Listener listener;
 
-        public GifViewHolder(@NonNull GifItemViewBinding binding, @NonNull Listener listener) {
+        GifViewHolder(@NonNull GifItemViewBinding binding, @NonNull Listener listener) {
             super(binding.getRoot());
             this.binding = binding;
             this.listener = listener;

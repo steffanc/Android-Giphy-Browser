@@ -1,6 +1,6 @@
-package com.giphy.browser.network;
+package com.giphy.browser.common.network;
 
-import com.giphy.browser.model.Gifs;
+import com.giphy.browser.common.model.Gifs;
 
 import io.reactivex.Single;
 import retrofit2.adapter.rxjava2.Result;

@@ -1,4 +1,4 @@
-package com.giphy.browser.model;
+package com.giphy.browser.common.model;
 
 import com.squareup.moshi.Json;
 

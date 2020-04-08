@@ -1,4 +1,4 @@
-package com.giphy.browser.model;
+package com.giphy.browser.common.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,17 +17,17 @@ public class Resource<T> {
 
     @NonNull
     public static <T> Resource<T> loading() {
-        return new Resource<T>(Status.LOADING, null, null);
+        return new Resource<>(Status.LOADING, null, null);
     }
 
     @NonNull
     public static <T> Resource<T> success(@NonNull T data) {
-        return new Resource<T>(Resource.Status.SUCCESS, data, null);
+        return new Resource<>(Resource.Status.SUCCESS, data, null);
     }
 
     @NonNull
     public static <T> Resource<T> failure(@NonNull Throwable error) {
-        return new Resource<T>(Resource.Status.FAILURE, null, error);
+        return new Resource<>(Resource.Status.FAILURE, null, error);
     }
 
     private Resource(@NonNull Resource.Status status, @Nullable T data, @Nullable Throwable error) {
