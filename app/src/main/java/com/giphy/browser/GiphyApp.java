@@ -2,6 +2,7 @@ package com.giphy.browser;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
 import androidx.viewbinding.BuildConfig;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -34,6 +35,7 @@ public class GiphyApp extends Application {
         repository = new Repository("ixvyd1kLkDNzbSgDGhl2gDQUBM3DECtG", service);
     }
 
+    @NonNull
     public Repository getRepository() {
         return repository;
     }

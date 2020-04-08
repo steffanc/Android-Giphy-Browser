@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimary">#111111</color>
+    <color name="colorPrimaryDark">#151515</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <color name="bg1">#FF6655</color>
+    <color name="bg2">#AA00ff</color>
+    <color name="bg3">#00DD00</color>
+    <color name="bg4">#FFFF00</color>
+    <color name="bg5">#33BBEE</color>
+    <color name="bg6">#33BBEE</color>
+
+    <array name="backgroundColors">
+        <item>@color/bg1</item>
+        <item>@color/bg2</item>
+        <item>@color/bg3</item>
+        <item>@color/bg4</item>
+        <item>@color/bg5</item>
+        <item>@color/bg6</item>
+    </array>
 </resources>

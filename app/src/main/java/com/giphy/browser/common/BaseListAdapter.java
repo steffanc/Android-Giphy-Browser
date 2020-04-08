@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 public abstract class BaseListAdapter<T extends BaseItem> extends ListAdapter<T, BaseViewHolder<T>> {
-    public BaseListAdapter(DiffUtil.ItemCallback<T> callback) {
+    public BaseListAdapter(@NonNull DiffUtil.ItemCallback<T> callback) {
         super(callback);
     }
 

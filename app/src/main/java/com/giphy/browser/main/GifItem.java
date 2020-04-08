@@ -1,44 +1,53 @@
 package com.giphy.browser.main;
 
+import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
+
 import com.giphy.browser.common.BaseItem;
 
-import org.jetbrains.annotations.NotNull;
-
 public class GifItem implements BaseItem {
-    @NotNull
+    @NonNull
     private final String id;
-    @NotNull
+    @NonNull
     private final String webp;
-    @NotNull
+    @NonNull
     private final String width;
-    @NotNull
+    @NonNull
     private final String height;
+    @ColorRes
+    private final int backgroundColor;
 
-    public GifItem(@NotNull String id, @NotNull String webp, String width, String height) {
+    public GifItem(@NonNull String id, @NonNull String webp, @NonNull String width, @NonNull String height, int backgroundColor) {
         this.id = id;
         this.webp = webp;
         this.width = width;
         this.height = height;
+        this.backgroundColor = backgroundColor;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public String getId() {
         return id;
     }
 
-    @NotNull
+    @NonNull
     public String getWebp() {
         return webp;
     }
 
-    @NotNull
+    @NonNull
     public String getWidth() {
         return width;
     }
 
-    @NotNull
+    @NonNull
     public String getHeight() {
         return height;
+    }
+
+    @ColorRes
+    public int getBackgroundColor() {
+        return backgroundColor;
     }
 }

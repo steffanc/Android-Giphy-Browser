@@ -1,12 +1,12 @@
 package com.giphy.browser;
 
+import androidx.annotation.NonNull;
+
 import com.giphy.browser.model.Gifs;
 import com.giphy.browser.model.Resource;
 import com.giphy.browser.network.ApiException;
 import com.giphy.browser.network.NetworkException;
 import com.giphy.browser.network.Service;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -17,27 +17,32 @@ import retrofit2.Response;
 import retrofit2.adapter.rxjava2.Result;
 
 public class Repository {
+    @NonNull
     private final String apiKey;
+    @NonNull
     private final Service service;
 
-    public Repository(@NotNull String apiKey, @NotNull Service service) {
+    public Repository(@NonNull String apiKey, @NonNull Service service) {
         this.apiKey = apiKey;
         this.service = service;
     }
 
+    @NonNull
     public Single<Resource<Gifs>> getTrendingGifs(int offset) {
         return service.getTrendingGifs(apiKey, offset)
                 .subscribeOn(Schedulers.io())
                 .map(this::toResource);
     }
 
-    public Single<Resource<Gifs>> getSearchGifs(String query, int offset) {
+    @NonNull
+    public Single<Resource<Gifs>> getSearchGifs(@NonNull String query, int offset) {
         return service.getSearchGifs(apiKey, query, offset)
                 .subscribeOn(Schedulers.io())
                 .map(this::toResource);
     }
 
-    private <T> Resource<T> toResource(Result<T> result) {
+    @NonNull
+    private <T> Resource<T> toResource(@NonNull Result<T> result) {
         if (result.isError()) {
             // Network error
             if (result.error() instanceof IOException) {

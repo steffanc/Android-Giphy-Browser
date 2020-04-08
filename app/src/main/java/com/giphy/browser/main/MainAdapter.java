@@ -1,17 +1,12 @@
 package com.giphy.browser.main;
 
-import android.graphics.drawable.Animatable;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.controller.ControllerListener;
-import com.facebook.imagepipeline.image.ImageInfo;
 import com.giphy.browser.R;
 import com.giphy.browser.common.BaseListAdapter;
 import com.giphy.browser.common.BaseViewHolder;
@@ -19,9 +14,10 @@ import com.giphy.browser.databinding.GifItemViewBinding;
 
 public class MainAdapter extends BaseListAdapter<GifItem> {
 
+    @NonNull
     private final GifViewHolder.Listener listener;
 
-    public MainAdapter(GifViewHolder.Listener listener) {
+    public MainAdapter(@NonNull GifViewHolder.Listener listener) {
         super(new Callback());
         this.listener = listener;
     }
@@ -38,10 +34,12 @@ public class MainAdapter extends BaseListAdapter<GifItem> {
             void onGifClicked(int position, GifItem item);
         }
 
+        @NonNull
         private final GifItemViewBinding binding;
+        @NonNull
         private final Listener listener;
 
-        public GifViewHolder(GifItemViewBinding binding, Listener listener) {
+        public GifViewHolder(@NonNull GifItemViewBinding binding, @NonNull Listener listener) {
             super(binding.getRoot());
             this.binding = binding;
             this.listener = listener;
@@ -55,28 +53,13 @@ public class MainAdapter extends BaseListAdapter<GifItem> {
                 }
             });
 
-            final ControllerListener listener = new BaseControllerListener<ImageInfo>() {
-                @Override
-                public void onIntermediateImageSet(String id, ImageInfo imageInfo) {
-                    updateViewSize(imageInfo);
-                }
-
-                @Override
-                public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
-                    updateViewSize(imageInfo);
-                }
-
-                private void updateViewSize(@Nullable ImageInfo imageInfo) {
-                    if (imageInfo != null) {
-                        binding.gif.setAspectRatio((float) imageInfo.getWidth() / imageInfo.getHeight());
-                    }
-                }
-            };
-
+            final int width = Integer.parseInt(item.getWidth());
+            final int height = Integer.parseInt(item.getHeight());
+            binding.gif.setAspectRatio((float) width / height);
+            binding.gif.getHierarchy().setPlaceholderImage(item.getBackgroundColor());
             binding.gif.setController(
                     Fresco.newDraweeControllerBuilder()
                             .setAutoPlayAnimations(true)
-                            .setControllerListener(listener)
                             .setOldController(binding.gif.getController())
                             .setUri(item.getWebp())
                             .build());
