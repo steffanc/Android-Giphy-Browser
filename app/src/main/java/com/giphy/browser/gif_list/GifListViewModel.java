@@ -72,12 +72,15 @@ class GifListViewModel extends BaseViewModel<GifListState> {
     }
 
     void searchClosed() {
+        final String query = getState().getQuery();
         setState(new GifListState.Builder(getState())
                 .setQuery(null)
                 .setSearchVisible(false)
                 .build());
 
-        gifsSubject.onNext(new FetchGifsEvent(LoadingType.LOADING, new Pagination(), null));
+        if (query != null) {
+            gifsSubject.onNext(new FetchGifsEvent(LoadingType.LOADING, new Pagination(), null));
+        }
     }
 
     void screenRefreshed() {
@@ -125,14 +128,13 @@ class GifListViewModel extends BaseViewModel<GifListState> {
                         .build());
                 break;
             case SUCCESS:
+                lastSuccessfulResult = result;
                 List<GifItem> items = new ArrayList<>();
                 if (result.loadingType.equals(LoadingType.PAGING)) {
                     items.addAll(getState().getItems());
                 }
                 items.addAll(toItems(result.gifs.getOrThrowData(), backgroundColors));
                 items = removeDuplicates(items);
-
-                lastSuccessfulResult = result;
 
                 setState(new GifListState.Builder(getState())
                         .setItems(items)
