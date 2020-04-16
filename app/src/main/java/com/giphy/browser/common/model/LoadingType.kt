@@ -1,4 +1,3 @@
 package com.giphy.browser.common.model
 
-enum class LoadingType {
-}
+enum class LoadingType { LOADING, REFRESHING, PAGING }

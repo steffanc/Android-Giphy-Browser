@@ -1,4 +1,3 @@
 package com.giphy.browser.common
 
-class BaseState {
-}
+interface BaseState
